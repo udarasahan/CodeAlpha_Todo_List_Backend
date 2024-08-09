@@ -3,23 +3,23 @@ import taskModel from "../Models/taskModel.js";
 import fs from 'fs';
 
 // Add task
-const addTask = async (req,res) => {
+import Task from '../Models/taskModel.js';
 
-    const task = new taskModel ({
-        title:req.body.title,
-        description:req.body.description,
-        dueDate:req.body.dueDate,
-        dueTime:req.body.dueTime
-    })
-    try {
-        await task.save();
-        res.json|({success:true,message:"Task Added"})
-    } catch (error) {
-        console.log(error)
-        res.json({success:false,message:"error"})
-    }
+const addTask = async (req, res) => {
+  console.log(req.body); // Log the request body to verify the data
 
-}
+  const { title, description, date, time } = req.body;
+
+  try {
+    const newTask = new taskModel({ title, description, date, time });
+    await newTask.save();
+    res.status(201).json({ success: true, message: 'Task added successfully' });
+  } catch (error) {
+    console.error("Error adding task:", error);
+    res.status(400).json({ success: false, message: 'Failed to add task', error });
+  }
+};
+  
 
 // all task list
 const listTask = async (req,res) => {
